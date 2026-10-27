@@ -41,7 +41,7 @@ For the self-contained published version:
 
 ~Build / Deployment:
 
-The repository contains two build scripts.
+The repository contains scripts for building, publishing, and packaging Roundify.
 
 **`build-win-x64.cmd`**
 
@@ -79,17 +79,25 @@ You can also publish manually with:
 
 ~Installation:
 
-There is currently no MSI/EXE installer. Roundify is portable.
+For an easier installation, download and run `Roundify-Setup.exe` when it is
+available in a project release. The installer installs Roundify for the
+current Windows user under `%LOCALAPPDATA%\\Programs\\Roundify`, creates a
+Start Menu shortcut, and offers an optional desktop shortcut. Administrator
+privileges are not required. The installer also offers to launch Roundify when
+setup finishes.
 
-For example, you can extract the published executable to:
+To build the installer yourself, install Inno Setup 6, then run:
 
-`C:\\Apps\\Roundify\\Roundify.exe`
+`publish-win-x64.cmd`
 
-or:
+`build-installer.cmd`
 
-`%LOCALAPPDATA%\\Programs\\Roundify\\Roundify.exe`
+The installer is created at `publish\\Roundify-Setup.exe`.
 
-Running the EXE does not copy files into `C:\\Program Files` and does not require administrator privileges.
+The self-contained published app can also be used portably without running the
+installer. Place the published files in a folder of your choice and run
+`Roundify.exe`. The portable version does not create shortcuts or register an
+uninstaller.
 
 ~Auto launch at startup:
 
@@ -131,14 +139,23 @@ The configuration is created automatically when Roundify saves settings for the 
 
 ~How to remove Roundify:
 
-Roundify currently has no traditional uninstaller because it is a portable application.
+If you installed Roundify with `Roundify-Setup.exe`, uninstall it from Windows
+**Settings > Apps > Installed apps** or from the Roundify entry in the Start
+Menu. The uninstaller removes the app and its startup entry, but keeps your
+settings under `%LOCALAPPDATA%\\Roundify` so they are available if you reinstall.
+
+To remove those settings too, delete `%LOCALAPPDATA%\\Roundify` after
+uninstalling.
+
+If you are using the portable version:
 
 1. Exit Roundify from the system tray.
 2. Disable **Start with Windows** before deleting the executable.
 3. Delete the folder containing `Roundify.exe`.
 4. Optionally delete `%LOCALAPPDATA%\\Roundify` to remove your settings.
 
-If you already deleted the EXE and forgot to disable startup, remove the startup entry with PowerShell:
+If you already deleted the portable EXE and forgot to disable startup, remove
+the startup entry with PowerShell:
 
 `Remove-ItemProperty -Path "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" -Name "Roundify" -ErrorAction SilentlyContinue`
 
@@ -184,7 +201,6 @@ Features to be added:
 - Custom overlay profiles.
 - Global hotkeys.
 - More advanced Settings UI.
-- Installer/uninstaller.
 - Automatic updates.
 - Additional performance tuning.
 
@@ -202,6 +218,8 @@ The project intentionally does **not** run as a Windows Service. The overlay has
 - `Roundify.csproj` - Main WPF project.
 - `build-win-x64.cmd` - Normal Release x64 build.
 - `publish-win-x64.cmd` - Self-contained single-file Windows x64 deployment.
+- `build-installer.cmd` - Packages the published app using Inno Setup 6.
+- `installer\\Roundify.iss` - Inno Setup installer definition.
 - `check-dotnet.cmd` - Diagnostic helper for checking the installed .NET SDK/workload environment.
 - `global.json` - Pins the project to SDK 10.0.401 with latest-patch roll-forward.
 - `%LOCALAPPDATA%\\Roundify\\settings.json` - User configuration created at runtime.

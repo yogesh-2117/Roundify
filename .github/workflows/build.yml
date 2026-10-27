@@ -19,8 +19,16 @@ jobs:
       - name: Publish
         run: .\publish-win-x64.cmd
 
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        run: .\build-installer.cmd
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Roundify-win-x64
-          path: publish/win-x64/Roundify.exe
+          name: Roundify-windows-x64
+          path: |
+            publish/Roundify-Setup.exe
+            publish/win-x64/Roundify.exe

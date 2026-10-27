@@ -1,5 +1,6 @@
 # Changelog
 
+- Added an optional per-user Inno Setup installer with Start Menu shortcuts and an uninstaller.
 - Tray-first background utility.
 - Added generated rounded-corner geometry instead of a fixed 1920x1080 PNG.
 - Added multi-monitor support.
